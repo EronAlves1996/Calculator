@@ -1,4 +1,36 @@
-const display = document.querySelector('#display');
+const display = {
+    elem: document.querySelector('#display'),
+    mask: '0',
+    inject: function(e){
+        if (this.mask === '0') this.mask = "";
+        this.mask += e.target.className === 'numButton' ? e.target.textContent : this.mask === '' ? '0' : "";
+        this.elem.textContent = this.mask;
+    },
+    manage: function(){
+        this.elem.textContent = this.mask;
+        this.mask = "";
+    },
+}
+
+const buffer = {
+    firstOperand: null,
+    secondOperand: null,
+    operator: null,
+    setFirstOperand: function(n){this.firstOperand = parseFloat(n)},
+    setSecondOperand: function(n){this.secondOperand = parseFloat(n)},
+    manage: function(){
+        if (this.firstOperand != null) {
+            this.setSecondOperand(display.mask);
+            this.firstOperand = operate(this.firstOperand, this.secondOperand, this.operator);
+            display.mask = this.firstOperand;
+            display.manage();
+        }
+        else {
+            this.setFirstOperand(display.mask); 
+            display.manage();
+        }
+    }
+};
 
 function add(firstOperand, secondOperand){
     return firstOperand + secondOperand;
@@ -24,22 +56,33 @@ function operate(firstOperand, secondOperand, operator){
             return multiply(firstOperand, secondOperand);
             break;
         case '/':
-            return divide(firstOperand, secondOperand)
+            return divide(firstOperand, secondOperand);
             break;
         default:
             return "Invalid Operator!";
     }
 }
 
-function injectInDisplay(e){
-    if (display.textContent === '0') display.textContent = "";
-    display.textContent += e.target.className === 'numButton' ? e.target.textContent 
-    : display.textContent === '0' ? '0' : "";
+function setOperator(e){
+    buffer.manage();
+    buffer.operator = e.target.textContent;
+}
+
+function callInject(e){
+    display.inject(e);
 }
 
 function activateNumbersButtons(){
     const buttons = document.querySelector('#numberPad');
-    buttons.addEventListener('click', injectInDisplay);
+    buttons.addEventListener('click', callInject);
 }
 
-addEventListener("DOMContentLoaded", activateNumbersButtons);
+function activateOperatorsPad(){
+    const buttons = document.querySelector('#operatorsPad');
+    buttons.addEventListener('click', setOperator);
+}
+
+addEventListener("DOMContentLoaded", ()=>{
+    activateNumbersButtons();
+    activateOperatorsPad();
+});
