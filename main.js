@@ -20,7 +20,7 @@ const buffer = {
     setSecondOperand: function(n){this.secondOperand = parseFloat(n)},
     manage: function(){
         if (this.firstOperand != null) {
-            this.setSecondOperand(display.mask);
+            this.setSecondOperand(!(display.mask === "") ? display.mask : this.secondOperand ? this.secondOperand : this.firstOperand);
             this.firstOperand = operate(this.firstOperand, this.secondOperand, this.operator);
             display.mask = this.firstOperand;
             display.manage();
