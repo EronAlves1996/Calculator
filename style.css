@@ -27,3 +27,32 @@ main.container{
     text-align: right;
     padding: 5px 0px;
 }
+
+.container#numberPad, .container#operatorsPad{
+    flex-direction: column;
+}
+
+#numberPad{
+    width: 300px;
+}
+
+#numPad1to9{
+    flex-flow: row wrap;
+}
+
+#numPad1to9 .numButton{
+    width: 90px;
+}
+
+.numButton{
+    height: 50px;
+    margin: 5px;
+}
+
+.operatorButton, #operatorsPad{
+    flex:1;
+}
+
+.operatorButton{
+    margin: 5px;
+}
