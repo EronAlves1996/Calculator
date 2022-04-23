@@ -1,3 +1,5 @@
+const display = document.querySelector('#display');
+
 function add(firstOperand, secondOperand){
     return firstOperand + secondOperand;
 }
@@ -28,3 +30,16 @@ function operate(firstOperand, secondOperand, operator){
             return "Invalid Operator!";
     }
 }
+
+function injectInDisplay(e){
+    if (display.textContent === '0') display.textContent = "";
+    display.textContent += e.target.className === 'numButton' ? e.target.textContent 
+    : display.textContent === '0' ? '0' : "";
+}
+
+function activateNumbersButtons(){
+    const buttons = document.querySelector('#numberPad');
+    buttons.addEventListener('click', injectInDisplay);
+}
+
+addEventListener("DOMContentLoaded", activateNumbersButtons);
