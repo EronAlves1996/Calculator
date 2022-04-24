@@ -21,17 +21,21 @@ const buffer = {
     manage: function(){
         if (this.firstOperand != null) {
             this.setSecondOperand(!(display.mask === "") ? display.mask : this.secondOperand ? this.secondOperand : this.firstOperand);
-            this.firstOperand = (this.operator === null) ? this.firstOperand : operate(this.firstOperand, this.secondOperand, this.operator);
+            this.firstOperand = (this.operator === null) ? this.firstOperand 
+                : forceFloatLimit(operate(this.firstOperand, this.secondOperand, this.operator));
             display.mask = this.firstOperand;
             display.manage();
         }
         else {           
-
             this.setFirstOperand(display.mask); 
             display.manage();
         }
     }
 };
+
+function forceFloatLimit(n){
+    return Number(n.toFixed(9));
+}
 
 function add(firstOperand, secondOperand){
     return firstOperand + secondOperand;
