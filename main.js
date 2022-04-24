@@ -135,8 +135,24 @@ function setDefaults(){
     buffer.operator = null;
 }
 
+function setClickOnKeyPressed(e){
+    const buttonsNumbers = document.querySelectorAll(".numButton");
+    const buttonsOperators = document.querySelectorAll(".operatorButton");
+    const allButtons = [];
+    buttonsNumbers.forEach(n=> allButtons.push(n));
+    buttonsOperators.forEach(n=> allButtons.push(n));
+    allButtons.forEach(n => {
+        if(n.dataset.key===e.key) n.click();
+    });
+}
+
+function activateKeyboard(){
+    document.body.addEventListener("keydown", setClickOnKeyPressed);
+}
+
 addEventListener("DOMContentLoaded", ()=>{
     setDefaults();
     activateNumbersButtons();
     activateOperatorsPad();
+    activateKeyboard();
 });
