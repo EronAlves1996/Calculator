@@ -5,6 +5,10 @@ const display = {
         if(e.target.className !== "numButton") return;
         if (this.mask === '0') this.mask = "";
         if (e.target.textContent === '.' && this.mask.indexOf('.') !== -1) return;
+        if (e.target.id === "backspace"){
+            this.eraseDigit();
+            return;
+        }
         this.mask += e.target.textContent;
         this.elem.textContent = this.mask;
     },
@@ -12,6 +16,11 @@ const display = {
         this.elem.textContent = this.mask;
         this.mask = "";
     },
+    eraseDigit: function(){
+        this.mask = this.mask.slice(0, this.mask.length-1);
+        if (this.mask === '') this.mask = '0';
+        this.elem.textContent = this.mask;
+    }
 }
 
 const buffer = {
