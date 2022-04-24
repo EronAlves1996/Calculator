@@ -8,7 +8,9 @@ O objetivo foi praticar várias questões concernentes ao Javascript aprendidas 
 
 ## Rodando o projeto
 
+Rode um 
 ``
 git clone
 ``
-Só abrir o index.html a partir do navegador ou acessar 
+neste projeto. Só abrir o index.html a partir do navegador.
+Outra opção é acessar https://tttecnology.github.io/Calculator/
