@@ -2,8 +2,10 @@ const display = {
     elem: document.querySelector('#display'),
     mask: '0',
     inject: function(e){
+        if(e.target.className !== "numButton") return;
         if (this.mask === '0') this.mask = "";
-        this.mask += e.target.className === 'numButton' ? e.target.textContent : this.mask === '' ? '0' : "";
+        if (e.target.textContent === '.' && this.mask.indexOf('.') !== -1) return;
+        this.mask += e.target.textContent;
         this.elem.textContent = this.mask;
     },
     manage: function(){
@@ -21,15 +23,18 @@ const buffer = {
     manage: function(){
         if (this.firstOperand != null) {
             this.setSecondOperand(!(display.mask === "") ? display.mask : this.secondOperand ? this.secondOperand : this.firstOperand);
-            this.firstOperand = (this.operator === null) ? this.firstOperand 
-                : forceFloatLimit(operate(this.firstOperand, this.secondOperand, this.operator));
-            display.mask = this.firstOperand;
-            display.manage();
+            let result = (this.operator === null) ? this.firstOperand : operate(this.firstOperand, this.secondOperand, this.operator);
+            if (result === "ERROR"){
+                display.mask = result;
+            } else {
+                this.setFirstOperand(forceFloatLimit(result));
+                display.mask = this.firstOperand;
+            }
         }
         else {           
             this.setFirstOperand(display.mask); 
-            display.manage();
         }
+        display.manage();
     }
 };
 
@@ -47,8 +52,10 @@ function multiply(firstOperand, secondOperand){
     return firstOperand * secondOperand;
 }
 function divide(firstOperand, secondOperand){
+    if(secondOperand === 0) return "ERROR"; 
     return firstOperand / secondOperand;
 }
+
 function operate(firstOperand, secondOperand, operator){
     switch (operator){
         case '+':
