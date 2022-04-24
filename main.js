@@ -21,11 +21,12 @@ const buffer = {
     manage: function(){
         if (this.firstOperand != null) {
             this.setSecondOperand(!(display.mask === "") ? display.mask : this.secondOperand ? this.secondOperand : this.firstOperand);
-            this.firstOperand = operate(this.firstOperand, this.secondOperand, this.operator);
+            this.firstOperand = (this.operator === null) ? this.firstOperand : operate(this.firstOperand, this.secondOperand, this.operator);
             display.mask = this.firstOperand;
             display.manage();
         }
-        else {
+        else {                    
+
             this.setFirstOperand(display.mask); 
             display.manage();
         }
@@ -58,18 +59,32 @@ function operate(firstOperand, secondOperand, operator){
         case '/':
             return divide(firstOperand, secondOperand);
             break;
-        default:
-            return "Invalid Operator!";
     }
 }
 
 function setOperator(e){
+    if(e.target.className !== "operatorButton") return;
+    if (e.target.textContent === "="){
+        if (buffer.firstOperand !== null && buffer.operator !== null && display.mask !== ""){
+            buffer.manage();
+            buffer.operator = null;
+            deactivateNumbersButtons();
+            const buttons = document.querySelector('#operatorsPad');
+            buttons.addEventListener('click', continueOperation);
+        }
+        return;
+    }
     buffer.manage();
     buffer.operator = e.target.textContent;
 }
 
 function callInject(e){
     display.inject(e);
+}
+
+function deactivateNumbersButtons(){
+    const buttons = document.querySelector('#numberPad');
+    buttons.removeEventListener('click', callInject);
 }
 
 function activateNumbersButtons(){
@@ -80,6 +95,13 @@ function activateNumbersButtons(){
 function activateOperatorsPad(){
     const buttons = document.querySelector('#operatorsPad');
     buttons.addEventListener('click', setOperator);
+}
+
+function continueOperation(e){
+    if(e.target.className !== "operatorButton") return;
+    const buttons = document.querySelector('#operatorsPad');
+    activateNumbersButtons();
+    buttons.removeEventListener('click', continueOperation);
 }
 
 addEventListener("DOMContentLoaded", ()=>{
