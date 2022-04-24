@@ -25,7 +25,7 @@ const buffer = {
             display.mask = this.firstOperand;
             display.manage();
         }
-        else {                    
+        else {           
 
             this.setFirstOperand(display.mask); 
             display.manage();
@@ -73,6 +73,9 @@ function setOperator(e){
             buttons.addEventListener('click', continueOperation);
         }
         return;
+    } else if (e.target.textContent === "AC"){
+        setDefaults();
+        return;
     }
     buffer.manage();
     buffer.operator = e.target.textContent;
@@ -104,7 +107,16 @@ function continueOperation(e){
     buttons.removeEventListener('click', continueOperation);
 }
 
+function setDefaults(){
+    display.mask = 0;
+    display.manage();
+    buffer.firstOperand = null;
+    buffer.secondOperand = null;
+    buffer.operator = null;
+}
+
 addEventListener("DOMContentLoaded", ()=>{
+    setDefaults();
     activateNumbersButtons();
     activateOperatorsPad();
 });
